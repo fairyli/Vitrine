@@ -1,0 +1,92 @@
+@(message: String)
+
+@main("Welcome to Play") {
+
+{
+                       <script>
+                             var errorCallback = function(e) 
+                                {
+                                  console.log('Reeeejected!', e);
+                                };    
+                           var successCallback= function(localMediaStream) { 
+                                var video = document.querySelector('video');
+                                video.src = window.URL.createObjectURL(localMediaStream);
+                                }
+                           var captureMedia=function () 
+                            {       
+                                      var hdConstraints = {
+                                        video: {
+                                          mandatory: {
+                                            minWidth: 300,
+                                            minHeight:200,
+                                          }
+                                        }
+                                      };
+                                      navigator.getUserMedia = ( navigator.getUserMedia ||
+                                                                 navigator.webkitGetUserMedia ||
+                                                                 navigator.mozGetUserMedia ||
+                                                                 navigator.msGetUserMedia);
+                                      if (navigator.getUserMedia) 
+                                      {
+                                                navigator.getUserMedia(hdConstraints,successCallback,errorCallback);
+                                              }
+                                      else    
+                                      {
+                                             alert('getUserMedia not supported'); 
+                                      }
+                            }
+
+                     captureMedia();
+                      </script>
+                    
+                  <div class="header"> 
+                  <p>take a picture of the item you want to buy </p>
+                  </div>
+
+                  <div id="view cameraflow">
+                      <video id='vod' class="video_layer" controls style="height:200px;width:300px" autoplay>hello</video> 
+                      <img id="screenshot" src=""  style="height:200px;width:300px;display:none;" >
+                      <canvas id="can" style="height:200px;width:300px;display:none;">canvas</canvas>
+                      <button id='capture' onclick="change_display()">capture</button>
+                  </div>
+                  
+                  <div id="validation" class="invisible">
+                      <div> the picture taken shows here </div>
+                      <button onclick="location.href='/submit'"> valider </button>
+                      <a href="javascript:retry()">retry</a>
+                  </div>
+                  
+              <script>
+                          var vid = document.getElementById('vod');
+                          var can = document.getElementById("can"); 
+                          var ctx =can.getContext('2d');
+                        
+                           function snapshot() 
+                        {
+                            ctx.drawImage(vid, -20, 0, 300,200);
+                            document.querySelector('img').src = can.toDataURL('image/png');    
+                         }
+
+                           function change_display()
+                        {
+                            snapshot();
+                            document.getElementById('vod').style.display="none";
+                            document.getElementById("can").style.display="";      
+                            document.getElementById('validation').style.display="initial";   
+                            document.getElementById('capture').style.display="none";
+                        }
+                 
+                           function retry()
+                        {   document.getElementById('vod').style.display="initial";
+                            document.getElementById('validation').style.display="none";   
+                            document.getElementById('capture').style.display="";
+                            document.getElementById("can").style.display="none";
+                           
+                        }
+                  
+                         vid.addEventListener('click', change_display, false);
+              </script>
+
+}
+
+}
